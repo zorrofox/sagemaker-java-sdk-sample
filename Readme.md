@@ -15,6 +15,10 @@ see [Get started with the AWS SDK for Java 2.x](https://docs.aws.amazon.com/sdk-
 
 **Only the JDK 1.8 has been tested!**
 
+ ## Prerequisite
+
+- Install JRE 1.8
+- Upload the [model.tar.gz](model.tar.gz) file to your SageMaker S3 bucket and markdown the S3 URL which will use to modified the [config.properties](endpoint/src/main/resources/config.properties) file.
 
  ## Testing the Amazon SageMaker Java files
 
@@ -32,7 +36,7 @@ Before running the SageMaker JUnit tests, you must define values in the **config
 Define these values to successfully run the JUnit tests:
 
 - **image** - The registry path of the Docker image that contains the training algorithm. It's will be `727897471807.dkr.ecr.cn-north-1.amazonaws.com.cn/pytorch-inference:1.8.0-cpu-py3` in Beijing region.
-- **modelDataUrl** - The Amazon S3 path where the model artifacts, which result from model training, are stored.
+- **modelDataUrl** - The Amazon S3 path where the model artifacts, which result from model training, are stored. **MUST USE YOUR OWN SAGEMAKER S3 URI!**
 - **executionRoleArn** - The Amazon Resource Name (ARN) of the IAM role that SageMaker uses. **MUST BE SET!**
 - **modelName** - The model name used in various tests.
 - **region** - Which region deploy, which we will use Beijing region.
@@ -43,7 +47,7 @@ Define these values to successfully run the JUnit tests:
 ### Command line
 To run the JUnit tests from the command line, you can use the following command.
 
-		cd endpoint && ../mvn test
+	cd endpoint && ../mvn test
 
 You will see output from the JUnit tests, as shown here.
 
@@ -51,9 +55,12 @@ You will see output from the JUnit tests, as shown here.
 	[INFO]  T E S T S
 	[INFO] -------------------------------------------------------
 	[INFO] Running SageMakerTest
-	Test 1 passed
+    Test 1 passed
+	The ARN of the model is arn:aws-cn:sagemaker:cn-north-1:12345678900:model/java-sdk-pytorch-model
 	Test 2 passed
-	...
+	The ARN of the endpoint config is arn:aws-cn:sagemaker:cn-north-1:12345678900:endpoint-config/java-sdk-pytorch-model-config
+	The ARN of the endpoint is arn:aws-cn:sagemaker:cn-north-1:12345678900:endpoint/java-sdk-pytorch-model-endpoint
+	Test 3 passed
 	Done!
 	[INFO] Results:
 	[INFO]
@@ -79,3 +86,7 @@ If you do not define the correct values in the properties file, your JUnit tests
 	[INFO] ---------------------------------------
 	[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.1:test (default-test) on project SageMakerServiceIntegrationTest:  There are test failures.
 	[ERROR];
+
+### The reuslt and clear up
+
+Please find the created resource in the SageMaker console according to the ARN. And please clear up all the resource created by the testing manually.
